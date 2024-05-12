@@ -6,6 +6,8 @@ It showcases:
 
 - App installation and configuration flow.
 - Creating schedules and handling scheduled executions.
+- You can test the operation of the sensors in the SmartThings Start Kit.
+- If you have any camera devices, you can configure the Camera Image by [Frontent Project Repository](https://github.com/rktdnjs/starter-kit-smartapp-react)
 
 ## Setup instructions
 
@@ -13,15 +15,16 @@ It showcases:
 
 - A [Samsung account](https://account.samsung.com/membership/index.do) and the SmartThings mobile application.
 - A [Developer Workspace](https://smartthings.developer.samsung.com/workspace/) account.
-- A SmartThings compatible color bulb, such as SYLVANIA Smart RGBW, LIFX, or Phillips Hue.
+- [SmartThings Startter kit](https://www.samsung.com/sec/smartthings/HOMEKITA/HOMEKITA/) devices
 
 #### If testing locally (using provided webserver)
+
 - [Node.js](https://nodejs.org) and [npm](https://npmjs.com) installed (verified with npm version 6.14.8 and Node 12.19.0).
 - [ngrok](https://ngrok.com/) installed to create a secure tunnel and create a globally available URL for fast testing.
 
 ### Start
 
-This smartapp is a simple web server that can be used to run and test locally. 
+This smartapp is a simple web server that can be used to run and test locally.
 
 Clone or download this repository and follow the desired option.
 
@@ -35,35 +38,19 @@ Clone or download this repository and follow the desired option.
 
 ### Register
 
-Follow the instructions for [registering a SmartApp](https://smartthings.developer.samsung.com/docs/smartapps/app-registration.html) with the SmartThings platform.
+Follow the instructions for [registering a SmartApp](https://docs.google.com/presentation/d/1A7vduAePg_zAAWlXaRQwHT6CEzzyDpBzG__ELtzUxB0/edit#slide=id.g261dcf3c506_0_166) with the SmartThings platform.
 
 - The following OAuth2 scopes are required.
-	- `r:devices:*`
-	- `x:devices:*`
+  - `r:devices:*`
+  - `x:devices:*`
 
-#### Local Only
+### Result
 
-A `CONFIRMATION request` log should show in the log output of the local server once registered. Navigate to this link to [verify your domain ownership](https://smartthings.developer.samsung.com/docs/smartapps/webhook-apps.html#Verify-your-domain-ownership) and enable the app to receive events. **This is required for successful installation.**
+After you finished registering the SmartApp, You can see that an event occurs every time the device operates.
 
-### Test
-
-Follow the instructions for [testing a SmartApp](https://smartthings.developer.samsung.com/docs/testing/how-to-test.html).
-
-## Troubleshooting
-
-### Local
-
-- When installing the SmartApp in the SmartThings mobile app, if you get an error **Something went wrong. Please try to install the SmartApp again**, then it is possible that you did not navigate to the confirmation link as specified above. If this is the case, then in the npm server terminal you will also see an error. Make sure you navigate to the URL sent with the `CONFIRMATION request` to the npm server. This can be resent by navigating to Developer Workspace `Overview` and clicking `Verify App Registration`.
+If you have a camera, you can check the picture in the project if you register the device and follow the [Frontend Project Repository](https://github.com/rktdnjs/starter-kit-smartapp-react) to run an additional project.
 
 ## Documentation
 
-- Documentation for developing SmartApps can be found on the [SmartThings developer portal](https://smartthings.developer.samsung.com/develop/guides/smartapps/basics.html).
-- [SmartThings API reference documentation](https://smartthings.developer.samsung.com/develop/api-ref/st-api.html)
-- [SmartApp API reference documentation](https://smartthings.developer.samsung.com/docs/api-ref/smartapps-v1.html)
-
-## Credits
-
-The concept of a SmartThings-connected smart app is a variation of another SmartApp setting color of a light based on the weather.
-
-- [A SmartThings-connected color bulb](https://github.com/SmartThingsCommunity/weather-color-light-smartapp-nodejs)
-
+- Documentation for developing SmartApps can be found on the [SmartThings developer portal](https://developer.smartthings.com/docs/).
+- [SmartThings API reference documentation](https://developer.smartthings.com/docs/api/public)
