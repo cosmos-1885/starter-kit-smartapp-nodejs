@@ -36,6 +36,7 @@ async function handleMotionSensor(context, eventData, eventTime) {
 
 async function handleButton(context, eventData, eventTime) {
   console.log("handleButton() is called...");
+  console.log(context);
 }
 
 async function handleCameraImageCapture(context, eventData, eventTime) {
