@@ -64,7 +64,6 @@ async function getDevicesInformation() {
 
 async function sendEvent(eventInfo) {
   const url = "http://127.0.0.1:8080/api/device-event";
-  // const eventInfo = JSON.stringify(eventData);
   console.log(eventInfo);
 
   try {
@@ -77,14 +76,6 @@ async function sendEvent(eventInfo) {
   } catch (error) {
     console.log(error);
   }
-
-  // try {
-  //   const response = await axios.post(url, eventInfo);
-  //   return response;
-
-  // } catch (error) {
-  //   console.log(`Error: ${error}`)
-  // }
 }
 
 server.listen(PORT, () =>
