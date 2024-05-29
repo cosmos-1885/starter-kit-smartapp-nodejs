@@ -2,6 +2,10 @@ const SmartApp = require("@smartthings/smartapp");
 const express = require("express");
 const server = express();
 const cors = require("cors");
+const { promisify } = require("util");
+const { exec } = require("child_process");
+const execPromise = promisify(exec);
+const { default: axios } = require("axios");
 const PORT = process.env.PORT || 3005;
 
 server.use(express.json());
@@ -14,6 +18,74 @@ server.post("/", (req, res, next) => {
 server.get("/api/image", (req, res) => {
   res.json(imageURLS);
 });
+
+server.get("/information", async (req, res) => {
+  const devicesInfo = await getDevicesInformation();
+  res.json(devicesInfo);
+})
+
+
+async function getDevicesInformation() {
+  const command = "smartthings devices";
+  try {
+    const { stdout, stderr } = await execPromise(command);
+    // stderr가 있는 경우에는 에러가 발생한 것이므로 에러를 출력하고 함수를 종료
+    if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      return;
+    }
+    // stdout을 사용해 필요한 작업 수행
+    if (stdout) {
+      const deviceData = JSON.parse(stdout); // stdout이 JSON 문자열이라고 가정
+      // deviceData에서 필요한 정보 추출
+      deviceInfos = deviceData.map((device) => {
+        const { deviceId, name, label, locationId, components } = device;
+        // 모든 컴포넌트의 capabilities를 하나의 배열로 결합
+        const capabilities = components.flatMap((component) => component.capabilities.map((cap) => cap.id));
+        return {
+          deviceId,
+          name,
+          label,
+          locationId,
+          capabilities,
+        };
+      });
+
+      // 변환된 deviceInfos 객체를 JSON 문자열로 변환하여 출력
+      console.log(`deviceInfos : ${JSON.stringify(deviceInfos, null, 2)}`);
+
+      // 해당 deviceInfos 객체를 다른 서버로 전달하는 코드 작성 필요
+      return {deviceInfos};
+    }
+  } catch (error) {
+    console.log(`exec error : ${error}`);
+  }
+}
+
+async function sendEvent(eventInfo) {
+  const url = "http://127.0.0.1:8080/api/device-event";
+  // const eventInfo = JSON.stringify(eventData);
+  console.log(eventInfo);
+
+  try {
+    const response = await axios.post(url, eventInfo, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+
+  // try {
+  //   const response = await axios.post(url, eventInfo);
+  //   return response;
+
+  // } catch (error) {
+  //   console.log(`Error: ${error}`)
+  // }
+}
 
 server.listen(PORT, () =>
   console.log(`Server is up and running on port ${PORT}`)
@@ -36,7 +108,10 @@ async function handleMotionSensor(context, eventData, eventTime) {
 
 async function handleButton(context, eventData, eventTime) {
   console.log("handleButton() is called...");
-  console.log(context);
+  // console.log(eventData);
+  const response = await sendEvent(eventData);
+  console.log(response);
+  context.api.devices.sendCommands(context.config[response.deviceName], response.deviceCapabilityAttribute, response.deviceCapabilityCommand)
 }
 
 async function handleCameraImageCapture(context, eventData, eventTime) {
